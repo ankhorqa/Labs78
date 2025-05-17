@@ -28,8 +28,8 @@ public:
 
     virtual void displayInfo() const
     {
-        std::cout << "Name: " << name << ", HP: " << health
-            << ", Attack: " << attack << ", Defense: " << defense << std::endl;
+        std::cout << "Имя: " << name << ", HP: " << health
+            << ", Атака: " << attack << ", Защита: " << defense << std::endl;
     }
 
     virtual void heal(int amount) { }
@@ -38,25 +38,25 @@ public:
     {
         if (amount < 0)
         {
-            std::cout << "it has no effect!" << std::endl;
+            std::cout << "Без урона!" << std::endl;
         }
         else if (health - amount <= 0)
         {
             health = 0;
-            std::cout << name << " took " << amount
-                << " damage, and died!" << std::endl;
+            std::cout << name << " получил " << amount
+                << " урона и умер!" << std::endl;
         }
         else
         {
             health -= amount;
-            std::cout << name << " took " << amount
-                << " damage, new Health: " << health << std::endl;
+            std::cout << name << " получил " << amount
+                << " урона, текущее ХП: " << health << std::endl;
         }
     }
 
     virtual void attackEnemy(Entity& target)
     {
-        std::cout << name << " attacks " << target.name << " >> ";
+        std::cout << name << " атакует " << target.name << " >> ";
         int damage = attack - target.defense;
         target.takeDamage(damage);
     }
@@ -64,7 +64,6 @@ public:
     virtual ~Entity() {}
 };
 
-/* Character and Monster classes */
 class Character : public Entity
 {
 public:
@@ -76,14 +75,14 @@ public:
         if (health + amount > 100)
         {
             health = 100;
-            std::cout << name << " healed to maximum health points, new Health: "
+            std::cout << name << " ХП восстановлено до максимума."
                 << health << std::endl;
         }
         else
         {
             health += amount;
-            std::cout << name << " healed " << amount
-                << " health points, new Health: " << health << std::endl;
+            std::cout << name << " восстановлено " << amount
+                << " ХП, текущее ХП: " << health << std::endl;
         }
     }
 
@@ -96,17 +95,17 @@ public:
 
         bool isCriticalHit = (rand() % 100) < 20;
         if (isCriticalHit)
-            std::cout << "\033[35m" << name << " attacks " << target.getName() << " with critical hit x2 >> ";
+            std::cout << "\033[35m" << name << " атакует " << target.getName() << " с крит. уроном! >> ";
         else
-            std::cout << "\033[32m" << name << " attacks " << target.getName() << " >> ";
+            std::cout << "\033[32m" << name << " атакует " << target.getName() << " >> ";
         target.takeDamage(isCriticalHit ? damage * 2 : damage);
         std::cout << "\033[0m";
     }
 
     void displayInfo() const override
     {
-        std::cout << "Character: " << name << ", HP: " << health
-            << ", Attack: " << attack << ", Defense: " << defense << std::endl;
+        std::cout << "Персонаж: " << name << ", ХП: " << health
+            << ", Атака: " << attack << ", Защита: " << defense << std::endl;
     }
 };
 
@@ -122,9 +121,9 @@ public:
 
         bool hasExtraDamage = rand() % 100 < 30;
         if (hasExtraDamage)
-            std::cout << "\033[35m" << name << " attacks " << target.getName() << " with extra damage +5 >> ";
+            std::cout << "\033[35m" << name << " атакует " << target.getName() << " с крит. уроном +5 >> ";
         else
-            std::cout << "\033[36m" << name << " attacks " << target.getName() << " >> ";
+            std::cout << "\033[36m" << name << " атакует " << target.getName() << " >> ";
 
         target.takeDamage(hasExtraDamage ? damage + 5 : damage);
         std::cout << "\033[0m";
@@ -132,8 +131,8 @@ public:
 
     void displayInfo() const override
     {
-        std::cout << "Monster: " << name << ", HP: " << health
-            << ", Attack: " << attack << ", Defense: " << defense << std::endl;
+        std::cout << "Монстр: " << name << ", ХП: " << health
+            << ", Атака: " << attack << ", Защита: " << defense << std::endl;
     }
 };
 
@@ -144,10 +143,10 @@ std::mutex monstersMutex;
 
 void generateMonsters() {
     while (heroAlive) {
-        std::this_thread::sleep_for(std::chrono::seconds(3)); // Новый монстр каждые 3 секунды
+        std::this_thread::sleep_for(std::chrono::seconds(3)); 
         std::lock_guard<std::mutex> lock(monstersMutex);
         monsters.push_back(Monster("Goblin", 50, 15, 5));
-        std::cout << "New monster generated!\n";
+        std::cout << "Появился новый монстр!\n";
     }
 }
 
@@ -161,21 +160,21 @@ void fight(Character& hero) {
         for (auto& monster : monsters)
         {
             if (rand() % 100 < 50 ? false : true)
-                std::cout << "\033[33m" << "Hero misses the attack!" << "\033[0m" << std::endl;
+                std::cout << "\033[33m" << "Герой не попадает!" << "\033[0m" << std::endl;
             else
                 hero.attackEnemy(monster);
             
             std::this_thread::sleep_for(std::chrono::seconds(1));
 
             if (rand() % 100 < 50 ? false : true)
-                std::cout << "\033[33m" << "Monster misses the attack!" << "\033[0m" << std::endl;
+                std::cout << "\033[33m" << "Монстр не попадает!" << "\033[0m" << std::endl;
             else
                 monster.attackEnemy(hero);
             
 
             if (hero.getHealth() <= 0)
             {
-                std::cout << "\033[31m" << hero.getName() << " died!" << "\033[0m" << std::endl;
+                std::cout << "\033[31m" << hero.getName() << " убит!" << "\033[0m" << std::endl;
                 heroAlive = false;
                 break;
             }
@@ -192,20 +191,6 @@ int main() {
 
     std::thread fightThread(fight, std::ref(hero));
     fightThread.detach();
-    
-    while (heroAlive)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
-
-    int killedMonsters = 0;
-    for (auto& monster : monsters)
-    {
-        if (monster.getHealth() <= 0)
-            killedMonsters++;
-    }
-
-    std::cout << "\033[34m" << "\nBefore died, hero kill " << killedMonsters << " monsters!\n" << "\033[31m" << std::endl;
 
     return 0;
 }

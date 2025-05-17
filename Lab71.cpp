@@ -23,8 +23,8 @@ public:
     int getDefense() const { return defense; }
 
     virtual void displayInfo() const {
-        std::cout << "Name: " << name << ", HP: " << health
-            << ", Attack: " << attack << ", Defense: " << defense << std::endl;
+        std::cout << "Имя: " << name << ", HP: " << health
+            << ", Атака: " << attack << ", Защита: " << defense << std::endl;
     }
 };
 
@@ -54,7 +54,7 @@ public:
 void saveToFile(const GameManager<std::unique_ptr<Entity>>& manager, const std::string& filename) {
     std::ofstream file("save_data.txt");
     if (!file.is_open()) {
-        throw std::runtime_error("Failed to open file for writing.");
+        throw std::runtime_error("Невозможно открыть файл для записи.");
     }
 
     for (const auto& entity : manager) {
@@ -66,7 +66,7 @@ void saveToFile(const GameManager<std::unique_ptr<Entity>>& manager, const std::
 GameManager<std::unique_ptr<Entity>> loadFromFile(const std::string& filename) {
     std::ifstream file("save_data.txt");
     if (!file.is_open()) {
-        throw std::runtime_error("Failed to open file for reading.");
+        throw std::runtime_error("Невозможно открыть файл для чтения.");
     }
 
     GameManager<std::unique_ptr<Entity>> manager;
@@ -89,16 +89,16 @@ GameManager<std::unique_ptr<Entity>> loadFromFile(const std::string& filename) {
 }
 
 int main() {
-    std::cout << "\n[~] Creating game manager:\n" << std::endl;
+    std::cout << "\n[~] Создается гейм-менеджер:\n" << std::endl;
     GameManager<std::unique_ptr<Entity>> manager;
-    manager.addEntity(std::make_unique<Entity>("Hero", 100, 10, 5));
-    manager.addEntity(std::make_unique<Entity>("Goblin", 50, 7, 3));
+    manager.addEntity(std::make_unique<Entity>("Герой", 100, 10, 5));
+    manager.addEntity(std::make_unique<Entity>("Гоблин", 50, 7, 3));
     manager.displayAll();
 
-    std::cout << "\n[~] Saving to file:\n" << std::endl;
+    std::cout << "\n[~] Сохраняется в файл:\n" << std::endl;
     saveToFile(manager, ".\\save_data.txt");
 
-    std::cout << "\n[~] Loading from file:\n" << std::endl;
+    std::cout << "\n[~] Загружается из файла:\n" << std::endl;
     auto loadedManager = loadFromFile(".\\save_data.txt");
     loadedManager.displayAll();
 

@@ -9,7 +9,7 @@ private:
     std::string address;
 
 public:
-    // Геттеры
+
     std::string getName() const {
         return name;
     }
@@ -31,7 +31,7 @@ public:
             name = newName;
         }
         else {
-            std::cerr << "Error: Name cannot be empty!" << std::endl;
+            std::cerr << "Ошибка: Имя не может быть пустым." << std::endl;
         }
     }
 
@@ -40,7 +40,7 @@ public:
             age = newAge;
         }
         else {
-            std::cerr << "Error: Age must be between 0 and 120!" << std::endl;
+            std::cerr << "Ошибка: Некорректный возраст." << std::endl;
         }
     }
 
@@ -49,7 +49,7 @@ public:
             email = newEmail;
         }
         else {
-            std::cerr << "Error: Invalid email format!" << std::endl;
+            std::cerr << "Ошибка: Некорректный email." << std::endl;
         }
     }
 
@@ -64,18 +64,18 @@ public:
     }
 
     void displayInfo() const {
-        std::cout << "Name: " << name << ", Age: " << age << ", Email: "
-            << email << ", Address: " << address << std::endl;
+        std::cout << "Имя: " << name << ", Возраст: " << age << ", Email: "
+            << email << ", Адрес: " << address << std::endl;
     }
 };
 
 int main() {
     Person person;
 
-    person.setName("Kravchenko Eugene");
-    person.setAge(20);
-    person.setEmail("eugene.kr@example.com");
-    person.setAddress("12 Main St");
+    person.setName("Игорь Мышляев");
+    person.setAge(19);
+    person.setEmail("igormyslaev@example.com");
+    person.setAddress("улица Лермонтова, 19");
 
     std::cout << "Name: " << person.getName() << std::endl;
     std::cout << "Age: " << person.getAge() << std::endl;
